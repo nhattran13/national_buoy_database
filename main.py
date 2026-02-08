@@ -5,7 +5,6 @@ from geopy.geocoders import Nominatim
 
 
 
-
 def extract_data():
     api = NdbcApi()
 
