@@ -2,6 +2,9 @@ import argparse
 from ndbc_api import NdbcApi
 import argparse
 from geopy.geocoders import Nominatim
+from sqlalchemy import create_engine
+
+
 
 
 
@@ -21,6 +24,9 @@ def extract_data():
     print(data)
 
     data.to_csv(f"{stationID}_{modes}_data.csv", index=False)                                       # Save the fetched data to a CSV file named using the station ID and mode
+
+    data["station_id"] = str(stationID)                                                                      # Add a new column to the data DataFrame to store the station ID for each observation
+    load_data_to_db(data)                                                                             # Load the fetched data into a MySQL database using the 'load_data_to_db' function defined below
 
 
 
@@ -54,6 +60,12 @@ def get_city_location():
         return (location.latitude, location.longitude)
     else:
         print("City not found")
+
+
+def load_data_to_db(data):
+    engine = create_engine("mysql+pymysql://root:password@localhost:3306/schemadb")
+    data.to_sql('buoy_observations', con=engine, if_exists='append', index=False)                    # Load the provided data into the 'buoy_observations' table in the MySQL database using SQLAlchemy
+    print("Data loaded to database successfully")
 
 
 if __name__ == "__main__":
