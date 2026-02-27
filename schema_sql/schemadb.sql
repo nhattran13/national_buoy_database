@@ -9,8 +9,8 @@ USE schemadb;
 
 CREATE TABLE buoy_observations (
 
-    station_id VARCHAR(10) ,
-
+    station_id VARCHAR(10) NOT NULL,
+    observation_time VARCHAR(19) NOT NULL,
     wdir  DECIMAL(10,1),
     wspd  DECIMAL(10,1),
     gst   DECIMAL(10,1),
@@ -24,9 +24,7 @@ CREATE TABLE buoy_observations (
     dewp  DECIMAL(10,1),
     vis   DECIMAL(10,1),
     ptdy  DECIMAL(10,1),
-    tide  DECIMAL(10,1),
-
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    tide  DECIMAL(10,1)
 );
 
 SELECT * FROM buoy_observations;

@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:8.2
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: schemadb
+    volumes:
+      - ./schema_sql/schemadb.sql:/docker-entrypoint-initdb.d/schemadb.sql
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: python_loader
+    depends_on:
+      - db
