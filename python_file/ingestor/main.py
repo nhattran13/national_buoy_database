@@ -1,28 +1,26 @@
 import argparse
 from ndbc_api import NdbcApi
-import argparse
 from geopy.geocoders import Nominatim
+from data_ingestion import data_ingest
+from connect_sql import connect_sql
 
 
-
-def extract_data():
-    api = NdbcApi()
-
-    parser = argparse.ArgumentParser(description="Fetch data from NDBC API")                        # Create an argument parser to handle command-line arguments for station ID and mode of data to fetch
+def data_parse():
+    parser = argparse.ArgumentParser(description="Connect to MySQL database")        # Create an argument parser to handle command-line arguments for the station ID and year
+    parser.add_argument("rootPassword", type=str, nargs="?", default="password", help="Root password")
+    parser.add_argument("databaseName", type=str, nargs="?", default="buoy_db", help="Database name")
     parser.add_argument("stationID", type=str, nargs="?", default="44065", help="Station ID to fetch data for")
-    parser.add_argument("mode", type=str, nargs="?", default="stdmet", choices=["adcp", "cdwind", "ocean", "spec", "supl", "swden", "swdir", "swdir2", "swr1", "swr2" , "stdmet"], help="Mode of data to fetch")
-
-    args = parser.parse_args()                                                                     # Parse the command-line arguments and store them in 'args' value. Then extract to stationID and modes variables
-    stationID = args.stationID
-    modes = args.mode
-    
-    test_station = api.station(station_id=stationID, as_df=False)                                   # Fetch station information for the specified station ID and print it to the console
-    data=api.get_data(station_id=stationID, mode=modes, as_df=True)
-    print(data)
-
-    data.to_csv(f"{stationID}_{modes}_data.csv", index=False)                                       # Save the fetched data to a CSV file named using the station ID and mode
+    parser.add_argument("year", type=str, nargs="?", default="2025", help="Year of data to fetch")
 
 
+    args = parser.parse_args()                                                                      # Parse the command-line arguments and store them in 'args' value. Then pass to root_password and database_name variables
+    root_password = args.rootPassword
+    database_name = args.databaseName
+    station_id = args.stationID
+    year = args.year
+
+    connect_sql(root_password, database_name)                                                                      # Connect to the MySQL database using the 'connect_sql' function defined in 'connect_sql.py'
+    data_ingest(station_id, year)                                                                                      # Fetch data from the NDBC API and load it into a MySQL database
 
 
 def get_stations(longtiude=None, latitude=None):
@@ -36,7 +34,6 @@ def get_stations(longtiude=None, latitude=None):
 
     nearest = api.nearest_station(lat=lat, lon=lon)                                                 # Find the nearest station to the provided latitude and longitude
     print(nearest)
-
 
 
 
@@ -56,7 +53,10 @@ def get_city_location():
         print("City not found")
 
 
+
+
+
 if __name__ == "__main__":
     #lat, lon = get_city_location()                                                                      # Get the latitude and longitude of the specified city
     #get_stations(0,0)
-    extract_data()
+    data_parse()                                                                                      # Parse the command-line arguments and fetch the data for the specified station and year

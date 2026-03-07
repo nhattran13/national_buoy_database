@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mysql:8.2
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./buoy_database/${MYSQL_DATABASE}.sql:/docker-entrypoint-initdb.d/${MYSQL_DATABASE}.sql
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: python_loader
+    depends_on:
+      - db
+    ports:
+      - "8501:8501"
+    environment:
+      STATION_ID: ${STATION_ID}
+      YEAR: ${YEAR}
+    command: bash -c "python python_file/ingestor/main.py \"${MYSQL_ROOT_PASSWORD}\" \"${MYSQL_DATABASE}\" \"${STATION_ID}\" \"${YEAR}\" &&
+             streamlit run python_file/streamlit_UI/appUI.py --server.port=8501 --server.address=0.0.0.0"
