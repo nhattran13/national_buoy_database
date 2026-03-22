@@ -14,6 +14,6 @@ def connect_sql(root_password, database_name):
             return conn
         except Exception as e:
             print(f"Failed to connect to MySQL database: {e}")
-            time.sleep(2)  # Wait 5 seconds before retrying
+            time.sleep(2)  # Wait 2 seconds before retrying
 
     raise Exception("Failed to connect to MySQL database after 10 attempts")

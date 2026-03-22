@@ -1,0 +1,9 @@
+buoy_database/
+
+README.md
+
+docker-compose.yml
+__pycache__/
+*.pyc
+*.log
+*.sql

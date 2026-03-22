@@ -7,10 +7,10 @@ from connect_sql import connect_sql
 
 def data_parse():
     parser = argparse.ArgumentParser(description="Connect to MySQL database")        # Create an argument parser to handle command-line arguments for the station ID and year
-    parser.add_argument("rootPassword", type=str, nargs="?", default="password", help="Root password")
-    parser.add_argument("databaseName", type=str, nargs="?", default="buoy_db", help="Database name")
-    parser.add_argument("stationID", type=str, nargs="?", default="44065", help="Station ID to fetch data for")
-    parser.add_argument("year", type=str, nargs="?", default="2025", help="Year of data to fetch")
+    parser.add_argument("rootPassword", type=str, nargs="?", help="Root password")
+    parser.add_argument("databaseName", type=str, nargs="?", help="Database name")
+    parser.add_argument("stationID", type=str, nargs="?",  help="Station ID to fetch data for")
+    parser.add_argument("year", type=str, nargs="?", help="Year of data to fetch")
 
 
     args = parser.parse_args()                                                                      # Parse the command-line arguments and store them in 'args' value. Then pass to root_password and database_name variables

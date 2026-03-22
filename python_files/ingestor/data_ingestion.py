@@ -5,12 +5,12 @@ import requests
 from sqlalchemy import create_engine
 
 def data_ingest(station_id, year):
-    extract_std_data(station_id, year)                                                                             # Call the function to extract standard meteorological data for the specified station and year
-    extract_cwind_data(station_id, year)                                                                             # Call the function to extract cwind data for the specified station and year
+    import_std_data(station_id, year)                                                                             # Call the function to extract standard meteorological data for the specified station and year
+    import_cwind_data(station_id, year)                                                                             # Call the function to extract cwind data for the specified station and year
 
 
 
-def extract_std_data(station_id, year):                                                             #extract stdmet data    
+def import_std_data(station_id, year):                                                             #extract stdmet data    
 
     for i in range(10):
         try:
@@ -52,13 +52,13 @@ def extract_std_data(station_id, year):                                         
     )
     df = df.drop(columns=["YY", "MM", "DD", "hh", "mm"])
 
-    df.to_csv(f"{station_id}h{year}.csv", index=False)
-    print(f"STDMET data extracted from {station_id} in {year} and saved to CSV successfully")
+    #df.to_csv(f"{station_id}h{year}.csv", index=False)
+    #print(f"STDMET data extracted from {station_id} in {year} and saved to CSV successfully")
     load_stdmet_to_db(df)                                                                             # Load the fetched data into a MySQL database using the 'load_data_to_db' function defined below
 
 
 
-def extract_cwind_data(station_id, year):                                                             #extract cwind data
+def import_cwind_data(station_id, year):                                                             #extract cwind data
     for i in range(10):
         try:
             url_cwind = "https://www.ndbc.noaa.gov/view_text_file.php?filename={station_id}c{year}.txt.gz&dir=data/historical/cwind/"
@@ -99,8 +99,8 @@ def extract_cwind_data(station_id, year):                                       
     df = df.drop(columns=["YY", "MM", "DD", "hh", "mm"])
 
 
-    df.to_csv(f"{station_id}c{year}.csv", index=False)
-    print(f"CWIND data extracted from {station_id} in {year} and saved to CSV successfully")
+    #df.to_csv(f"{station_id}c{year}.csv", index=False)
+    #print(f"CWIND data extracted from {station_id} in {year} and saved to CSV successfully")
     load_cwind_to_db(df)                                                                             # Load the fetched data into a MySQL database using the 'load_data_to_db' function defined below
 
 
