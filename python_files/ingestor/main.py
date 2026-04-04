@@ -37,24 +37,6 @@ def get_stations(longtiude=None, latitude=None):
 
 
 
-def get_city_location():
-    parser = argparse.ArgumentParser(description="Get the latitude and longitude of a city")        # Create an argument parser to handle command-line arguments for the city name
-    parser.add_argument("city", type=str, nargs="*", default=["New", "York"], help="Name of the city to get location for")
-
-    args = parser.parse_args()                                                                      # Parse the command-line arguments and store them in 'args' value. Then pass to city variable
-    city = " ".join(args.city)
-
-    geolocator = Nominatim(user_agent="myGeocoder")                                                 # Create a geolocator object using the Nominatim geocoding service
-    location = geolocator.geocode(city)
-    if location:                                                                                    # If the city is found, print its latitude and longitude to the console and return them as a tuple
-        print(f"Latitude: {location.latitude}, Longitude: {location.longitude}")
-        return (location.latitude, location.longitude)
-    else:
-        print("City not found")
-
-
-
-
 
 if __name__ == "__main__":
     #lat, lon = get_city_location()                                                                      # Get the latitude and longitude of the specified city

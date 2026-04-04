@@ -3,6 +3,7 @@ from time import time
 import pandas as pd
 import requests
 from sqlalchemy import create_engine
+import os
 
 def data_ingest(station_id, year):
     import_std_data(station_id, year)                                                                             # Call the function to extract standard meteorological data for the specified station and year
@@ -105,12 +106,12 @@ def import_cwind_data(station_id, year):                                        
 
 
 def load_stdmet_to_db(data):
-    engine = create_engine("mysql+pymysql://root:password@db:3306/buoy_db")
+    engine = create_engine(f"mysql+pymysql://root:{os.environ.get('MYSQL_ROOT_PASSWORD')}@db:3306/{os.environ.get('MYSQL_DATABASE')}")
     data.to_sql('buoy_observations', con=engine, if_exists='append', index=False)                    # Load the provided data into the 'buoy_observations' table in the MySQL database using SQLAlchemy
     print("Data loaded to database successfully")
 
 
 def load_cwind_to_db(data):
-    engine = create_engine("mysql+pymysql://root:password@db:3306/buoy_db")
+    engine = create_engine(f"mysql+pymysql://root:{os.environ.get('MYSQL_ROOT_PASSWORD')}@db:3306/{os.environ.get('MYSQL_DATABASE')}")
     data.to_sql('cwind', con=engine, if_exists='append', index=False)                    # Load the provided data into the 'cwind' table in the MySQL database using SQLAlchemy
     print("Data loaded to database successfully")
