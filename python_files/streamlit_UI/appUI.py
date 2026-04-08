@@ -24,9 +24,9 @@ def show_buoy_info(): #buoy_df and cwind_df are defined in the main function
     latest = buoy_df.iloc[-1]
     prev = buoy_df.iloc[-25]
 
-    col1.metric(f"Air Temp on {latest['observation_time'].date()}", f"{latest['atmp']}°F", f"{round(latest['atmp'] - prev['atmp'], 1)}°F")
-    col2.metric(f"Wind Speed on {latest['observation_time'].date()}", f"{latest['wspd']} kts")
-    col3.metric(f"Pressure on {latest['observation_time'].date()}", f"{latest['pres']} in")
+    col1.metric(f"Air Temp on {latest['observation_time'].date()}", f"{latest['atmp']}°C", f"{round(latest['atmp'] - prev['atmp'], 1)}°F")
+    col2.metric(f"Wind Speed on {latest['observation_time'].date()}", f"{latest['wspd']} m/s")
+    col3.metric(f"Pressure on {latest['observation_time'].date()}", f"{latest['pres']} hPa")
     col4.metric(f"Wind Direction on {latest['observation_time'].date()}", f"{latest['wdir'] }°")
 
     #Trend charts
